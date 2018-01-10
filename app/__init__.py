@@ -1,6 +1,7 @@
-from flask import Flask
+from flask import Flask, render_template, make_response
 import config
 from bs4 import BeautifulSoup
+from xml.etree import ElementTree as ET
 import requests
 import datetime
 from app import banner
@@ -15,12 +16,6 @@ banner_server = banner.Banner()
 @app.route("/")
 def index():
     return "Hello World"
-
-
-@app.route("/interact")
-def interact():
-    banner_server.insert_row('2017-1233', get_current_date())
-    return "lol"
 
 
 @app.route("/scrape")
@@ -88,10 +83,19 @@ def page_scrape(link):
     print time
 
     # Adds a row in Database
-    #TODO banner_server.insert_row(id_, get_current_date())
-    banner_server.get_date_from_id("2017-1119")
+    past_date = banner_server.get_date_from_id(id_, get_current_date())
+
+    print past_date.strftime("%d-%b-%y")
 
 
 def get_current_date():
     time = datetime.datetime.now().strftime("%d-%b-%y")
     return time
+
+
+@app.route("/output")
+def create_xml():
+    sitemap_xml = render_template('output.xml')
+    response = make_response(sitemap_xml)
+    response.headers["Content-Type"] = "application/xml"
+    return response

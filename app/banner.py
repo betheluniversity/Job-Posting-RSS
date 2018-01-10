@@ -42,7 +42,7 @@ class Banner():
 
     # Determines if the Table contains a row with the JOB_ID of job_id
     # Also returns the Date for that ID
-    def get_date_from_id(self, job_id):
+    def get_date_from_id(self, job_id, date_):
         sql = """SELECT DATE_FOUND FROM JOB_POST_RSS WHERE JOB_ID = '%s'""" % job_id
         results = self.session.execute(sql)
         # Gets the Row of Data
@@ -50,12 +50,13 @@ class Banner():
 
         if result is None:
             self.session.commit()
+            self.insert_row(job_id, date_)
             return None
 
-        result = result.items()[0]
+        result = result.items()[0][1]
         # self.session.commit()
 
-        sql = """UPDATE JOB_POST_RSS SET DATE_LAST_SEEN='04-JAN-27' WHERE JOB_ID='%s'""" % job_id
+        sql = """UPDATE JOB_POST_RSS SET DATE_LAST_SEEN='%s' WHERE JOB_ID='%s'""" % (date_, job_id)
         # self.session.execute(sql)
         # self.session.commit()
         self.execute(sql)
@@ -65,16 +66,5 @@ class Banner():
     # Inserts row with the Job_id, and the Current Date
     def insert_row(self, id_, date_):
         sql = """INSERT INTO JOB_POST_RSS VALUES ('%s','%s','%s')""" % (id_, date_, date_)
-        results = self.execute(sql)
-        return results
-
-    # Updates the LAST_SEEN date from the table, and gets the DATE_FOUND
-    def update_row(self):
-        #TODO sql = """INSERT INTO JOB_POST_RSS VALUES ('%s','%s','%s')""" % (id_, date_, date_)
-        results = self.execute(sql)
-        return results
-
-    def get_program_data(self):
-        sql = """INSERT INTO JOB_POST_RSS VALUES ('2016-1333','13-NOV-92')"""
         results = self.execute(sql)
         return results
