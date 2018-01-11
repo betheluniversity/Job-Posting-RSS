@@ -28,11 +28,16 @@ def scrape():
     # Loops through all links in XML, notated by the <loc> tag
     # TODO do we need the lastmod day and time?
     number = 0
+    jobs = []
     for link in soup.find_all('loc'):
-        page_scrape(link.get_text())
+        jobs.append(page_scrape(link.get_text()))
         number = number + 1
 
-    return "Scraped from %s Job Listings." % number
+    # return "Scraped from %s Job Listings." % number
+    sitemap_xml = render_template('output.xml', **locals())
+    response = make_response(sitemap_xml)
+    response.headers["Content-Type"] = "application/xml"
+    return response
 
 
 def get_iframe_link(link):
@@ -79,23 +84,14 @@ def page_scrape(link):
         print descrip
         break
 
-    time = datetime.datetime.now().strftime("%d-%b-%y")
-    print time
-
     # Adds a row in Database
-    past_date = banner_server.get_date_from_id(id_, get_current_date())
+    time = banner_server.get_date_from_id(id_, get_current_date())
 
-    print past_date.strftime("%d-%b-%y")
+    time = time.strftime("%d-%b-%y")
+
+    return {id_, descrip, title, time}
 
 
 def get_current_date():
     time = datetime.datetime.now().strftime("%d-%b-%y")
     return time
-
-
-@app.route("/output")
-def create_xml():
-    sitemap_xml = render_template('output.xml')
-    response = make_response(sitemap_xml)
-    response.headers["Content-Type"] = "application/xml"
-    return response

@@ -51,7 +51,7 @@ class Banner():
         if result is None:
             self.session.commit()
             self.insert_row(job_id, date_)
-            return None
+            return date_
 
         result = result.items()[0][1]
         # self.session.commit()
