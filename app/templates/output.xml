@@ -1,3 +1,13 @@
+{# TODO: FIX FORMATTING #}
 <rss>
-    idek
+    <channel>
+        {% for job in jobs %}
+        <item>
+            <title>{{ job[2] }}</title>
+            <pubDate>{{ job[3] }}</pubDate>
+            <description>{{ job[1] }}</description>
+            <id>{{ job[0] }}</id>
+        </item>
+        {% endfor %}
+    </channel>
 </rss>

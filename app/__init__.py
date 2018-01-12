@@ -89,7 +89,7 @@ def page_scrape(link):
 
     time = time.strftime("%d-%b-%y")
 
-    return {id_, descrip, title, time}
+    return [id_, descrip, title, time]
 
 
 def get_current_date():
