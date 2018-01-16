@@ -1,6 +1,7 @@
 __author__ = ['ejc84332', 'grg27487']
 # python
 import sqlalchemy
+import datetime
 from sqlalchemy import MetaData
 from sqlalchemy.orm import sessionmaker
 
@@ -51,6 +52,7 @@ class Banner():
         if result is None:
             self.session.commit()
             self.insert_row(job_id, date_)
+            date_ = datetime.datetime.strptime(date_, "%d-%b-%y")
             return date_
 
         result = result.items()[0][1]
