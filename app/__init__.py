@@ -26,9 +26,10 @@ def scrape():
     # TODO think about changing to a faster parser
     soup = BeautifulSoup(xml.text, "html.parser")
     # Loops through all links in XML, notated by the <loc> tag
-    # TODO do we need the lastmod day and time?
     number = 0
     jobs = []
+    # TODO Maybe force all commits to happen at once. (versus each loop)
+    # For above change to be made, you will need to introduce the banner_server commit, etc., into __init__.py class
     for link in soup.find_all('loc'):
         jobs.append(page_scrape(link.get_text()))
         number = number + 1
@@ -50,8 +51,8 @@ def get_iframe_link(link):
 
 def page_scrape(link):
     # Variables needed to Scrape
-    link = get_iframe_link(link)
-    webpage = requests.get(link, params=None)
+    iframe_link = get_iframe_link(link)
+    webpage = requests.get(iframe_link, params=None)
     soup = BeautifulSoup(webpage.text, 'html.parser')
 
     # Data the program is finding
@@ -89,7 +90,7 @@ def page_scrape(link):
 
     time = time.strftime("%d-%b-%y")
 
-    return [id_, descrip, title, time]
+    return [id_, descrip, title, time, link]
 
 
 def get_current_date():

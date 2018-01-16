@@ -1,13 +1,15 @@
 {# TODO: FIX FORMATTING #}
-<rss>
+<rss version="2.0">
     <channel>
         {% for job in jobs %}
         <item>
             <title>{{ job[2] }}</title>
-            <pubDate>{{ job[3] }}</pubDate>
             <description>{{ job[1] }}</description>
-            <id>{{ job[0] }}</id>
+            <pubDate>{{ job[3] }}</pubDate>
+            <guid>{{ job[0] }}</guid>
+            <link>{{ job[4] }}</link>
         </item>
         {% endfor %}
     </channel>
 </rss>
+<!-- https://www.campaignmonitor.com/create/rss-to-email/#data-repeater -->
