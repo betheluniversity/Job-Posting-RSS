@@ -1,4 +1,4 @@
-activate_this = '/opt/directory/env/bin/activate_this.py'
+activate_this = '/opt/job_rss/env/bin/activate_this.py'
 execfile(activate_this, dict(__file__=activate_this))
 
 import sys
