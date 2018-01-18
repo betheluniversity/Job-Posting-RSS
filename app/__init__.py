@@ -6,6 +6,8 @@ import requests
 import datetime
 from app import banner
 import cx_Oracle
+import requests.packages.urllib3
+requests.packages.urllib3.disable_warnings()
 
 app = Flask(__name__)
 
