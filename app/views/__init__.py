@@ -93,7 +93,6 @@ class JobRSSView(FlaskView):
         for pos in unscraped_descrip:
             descrip_group = pos.find("p")
             descrip = descrip_group.text
-            print descrip
             break
 
         # Adds a row in Database
