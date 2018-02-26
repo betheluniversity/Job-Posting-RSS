@@ -1,6 +1,6 @@
 #log to stderr instead of stdout
 
-activate_this = '/opt/job-posting-rss/env/bin/activate_this.py'
+activate_this = '/opt/job_rss/env/bin/activate_this.py'
 execfile(activate_this, dict(__file__=activate_this))
 
 import logging, sys
