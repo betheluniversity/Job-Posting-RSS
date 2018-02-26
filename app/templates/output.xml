@@ -1,6 +1,10 @@
-{# TODO: FIX FORMATTING #}
 <rss version="2.0">
     <channel>
+        <title>RSS Example</title>
+        <description>This is an example of an RSS feed</description>
+        <link>http://www.domain.com/link.htm</link>
+        <lastBuildDate>Mon, 28 Aug 2006 11:12:55 -0400 </lastBuildDate>
+        <pubDate>Tue, 29 Aug 2006 09:00:00 -0400</pubDate>
         {% for job in jobs %}
         <item>
             <title>{{ job[2] }}</title>
@@ -12,4 +16,3 @@
         {% endfor %}
     </channel>
 </rss>
-<!-- https://www.campaignmonitor.com/create/rss-to-email/#data-repeater -->

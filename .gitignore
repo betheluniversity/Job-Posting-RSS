@@ -1,4 +1,5 @@
 .idea*
 
+*news-campaign.rss
 config.py*
 !config.py.dist

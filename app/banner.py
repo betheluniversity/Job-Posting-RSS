@@ -6,7 +6,7 @@ from sqlalchemy import MetaData
 from sqlalchemy.orm import sessionmaker
 
 # local
-from config import DB_KEY, CONSTR
+from app import app
 import cx_Oracle
 
 
@@ -27,7 +27,7 @@ class Banner():
     def get_connection(self):
         # Login
 
-        constr = CONSTR % DB_KEY
+        constr = app.config['CONSTR'] % app.config['DB_KEY']
 
         engine = sqlalchemy.create_engine(constr, echo=True)
 
@@ -45,9 +45,12 @@ class Banner():
     # Also returns the Date for that ID
     def get_date_from_id(self, job_id, date_):
         sql = """SELECT DATE_FOUND FROM JOB_POST_RSS WHERE JOB_ID = '%s'""" % job_id
-        results = self.session.execute(sql)
-        # Gets the Row of Data
-        result = results.fetchone()
+        try:
+            results = self.session.execute(sql)
+            # Gets the Row of Data
+            result = results.fetchone()
+        except:
+            result = None
 
         if result is None:
             self.session.commit()
@@ -68,5 +71,10 @@ class Banner():
     # Inserts row with the Job_id, and the Current Date
     def insert_row(self, id_, date_):
         sql = """INSERT INTO JOB_POST_RSS VALUES ('%s','%s','%s')""" % (id_, date_, date_)
+        results = self.execute(sql)
+        return results
+
+    def create_table(self):
+        sql = """CREATE TABLE JOB_POST_RSS (JOB_ID VARCHAR2(12 CHAR), DATE_FOUND DATE, DATE_LAST_SEEN DATE);"""
         results = self.execute(sql)
         return results
