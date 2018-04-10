@@ -16,11 +16,8 @@ class JobRSSView(FlaskView):
         # Banner Connection
         self.banner_server = Banner()
 
-    # todo: change to index when
-    # @route("/")
-    # def index(self):
-    @route("/test")
-    def test(self):
+    @route("/")
+    def index(self):
         file = open(app.config['INSTALL_LOCATION'] + '/news-campaign.rss', "r")
         response = make_response(file.read())
         response.headers["Content-Type"] = "application/xml"
