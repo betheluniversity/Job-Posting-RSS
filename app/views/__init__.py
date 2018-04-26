@@ -41,6 +41,8 @@ class JobRSSView(FlaskView):
             jobs.append(self._page_scrape(link.get_text()))
             number = number + 1
 
+        feed_date = datetime.datetime.now().strftime('%a, %d %b %Y')
+
         # return "Scraped from %s Job Listings." % number
         sitemap_xml = render_template('output.xml', **locals())
         response = make_response(sitemap_xml)
@@ -68,11 +70,6 @@ class JobRSSView(FlaskView):
         descrip = ""
         title = soup.find("h1")
 
-
-        # TODO if there is an error, sentry error!
-        # Prints the title
-        print title.string
-
         unscraped_id = soup.find_all("div", "iCIMS_JobHeaderGroup")
 
         for group_with_id in unscraped_id:
@@ -83,7 +80,6 @@ class JobRSSView(FlaskView):
             id_ = the_id.text
             # Gets rid of a newline character on scraped ID
             id_ = id_.strip()
-            print id_
 
         unscraped_descrip = soup.find_all("div", "iCIMS_InfoMsg iCIMS_InfoMsg_Job")
 
@@ -95,7 +91,7 @@ class JobRSSView(FlaskView):
         # Adds a row in Database
         time = self.banner_server.get_date_from_id(id_, self._get_current_date())
 
-        time = time.strftime("%d-%b-%y")
+        time = time.strftime('%a, %d %b %Y')
 
         return [id_, descrip, title, time, link]
 
