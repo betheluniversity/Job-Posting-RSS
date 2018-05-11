@@ -68,7 +68,7 @@ class JobRSSView(FlaskView):
         # Data the program is finding
         id_ = ""
         descrip = ""
-        title = soup.find("h1")
+        title = soup.find("h1").text.strip()
 
         unscraped_id = soup.find_all("div", "iCIMS_JobHeaderGroup")
 
