@@ -2,7 +2,7 @@ import requests
 import datetime
 
 from flask import render_template, make_response
-from flask.ext.classy import FlaskView, route
+from flask_classy import FlaskView, route
 from bs4 import BeautifulSoup
 
 from app import app
@@ -48,7 +48,7 @@ class JobRSSView(FlaskView):
         response = make_response(sitemap_xml)
         response.headers["Content-Type"] = "application/xml"
         file = open(app.config['INSTALL_LOCATION'] + '/news-campaign.rss', "wr")
-        file.write(sitemap_xml.encode('utf-8'))
+        file.write(sitemap_xml)
         file.close()
         return response
 
