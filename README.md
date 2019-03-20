@@ -1,5 +1,5 @@
 # Job-Posting-RSS
-Site grabs data from Job Posting Bethel Site, and scrapes each link for data. Then turns the data into an RSS feed.
+Site grabs data from Job Posting Bethel Site, and scrapes each link for data. Then turns the data into an RSS feed. This RSS feed is then processed by Campaign Monitor to send out emails when it changes.
 
 ![alt text](https://www.lucidchart.com/publicSegments/view/a7dc2e7a-26c0-4105-828e-f949cefedef9/image.png)
 
