@@ -48,7 +48,7 @@ class JobRSSView(FlaskView):
         response = make_response(sitemap_xml)
         response.headers["Content-Type"] = "application/xml"
         file = open(app.config['INSTALL_LOCATION'] + '/news-campaign.rss', "wr")
-        file.write(sitemap_xml)
+        file.write(sitemap_xml.encode('utf-8'))
         file.close()
         return response
 
