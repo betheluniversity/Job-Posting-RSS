@@ -6,3 +6,4 @@ FACULTY_SCRAPE_URL = ""
 CONSTR = ""
 DB_KEY = ""
 CASCADE_LOGIN = {'username': "", 'password': ""}
+SENTRY_URL = ''
