@@ -1,10 +1,7 @@
-SQLAlchemy
-Flask-SQLAlchemy
 Flask-Classy==0.6.10
 Flask
 bs4
 requests
 datetime
-cx-Oracle
 raven
 blinker

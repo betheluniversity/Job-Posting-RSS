@@ -7,11 +7,11 @@
         <pubDate>{{ feed_date }}</pubDate>
         {% for job in jobs %}
         <item>
-            <title>{{ job[2] }}</title>
-            <description>{{ job[1] }}</description>
-            <pubDate>{{ job[3] }}</pubDate>
-            <guid>{{ job[0] }}</guid>
-            <link>{{ job[4] }}</link>
+            <title>{{ job['title'] }}</title>
+            <description>{{ job['desc'] }}</description>
+            <pubDate>{{ job['date'] }}</pubDate>
+            <guid>{{ job['id'] }}</guid>
+            <link>{{ job['link'] }}</link>
         </item>
         {% endfor %}
     </channel>
