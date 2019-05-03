@@ -85,6 +85,9 @@ class JobRSSView(FlaskView):
         unscraped_desc = soup.find_all("div", "iCIMS_InfoMsg iCIMS_InfoMsg_Job")
         for pos in unscraped_desc:
             desc_group = pos.find("p")
+            # if the paragraph doesn't work, try li.
+            if not desc_group:
+                desc_group = pos.find("li")
             desc = desc_group.text
             break
 
