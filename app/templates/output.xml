@@ -1,8 +1,8 @@
 <rss version="2.0">
     <channel>
-        <title>Bethel University Staff Openings</title>
-        <description>A listing of the current staff openings at Bethel University</description>
-        <link>https://staffcareers-bethel.icims.com/jobs/search</link>
+        <title>{{ scrape_objects.get('title') }}</title>
+        <description>{{ scrape_objects.get('description') }}</description>
+        <link>{{ scrape_objects.get('jobs-url') }}</link>
         <lastBuildDate>{{ feed_date }}</lastBuildDate>
         <pubDate>{{ feed_date }}</pubDate>
         {% for job in jobs %}
