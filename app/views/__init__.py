@@ -11,45 +11,74 @@ from app.basic_auth import *
 
 class JobRSSView(FlaskView):
 
+    @route("/staff")
+    @route("/faculty")
+    @route("/both")
     @route("/")
     def index(self):
-        file = open(app.config['INSTALL_LOCATION'] + '/news-campaign.rss', "r")
+        if 'staff' in request.path:
+            rss_name = 'staff.rss'
+        elif 'faculty' in request.path:
+            rss_name = 'faculty.rss'
+        else:
+            rss_name = 'both.rss'
+
+        file = open(app.config['INSTALL_LOCATION'] + '/app/rss/' + rss_name, "r")
         response = make_response(file.read())
         response.headers["Content-Type"] = "application/xml"
         file.close()
         return response
 
-    @route("/create_new_rss")
     @requires_auth
+    @route("/create_new_rss")
     def create_new_rss(self):
-        # Uses Requests to grab the xml
-        xml = requests.get(app.config['STAFF_SCRAPE_URL'], params=None)
+        scrape_objects = [
+            {
+                'rss-name': 'staff.rss',
+                'scrape-url': app.config['STAFF_SCRAPE_URL'],
+                'title': 'Bethel University Staff Openings',
+                'description': 'A listing of the current staff openings at Bethel University',
+                'jobs-url': 'https://staffcareers-bethel.icims.com/jobs/search'
+            },
+            {
+                'rss-name': 'faculty.rss',
+                'scrape-url': app.config['FACULTY_SCRAPE_URL'],
+                'title': 'Bethel University Faculty Openings',
+                'description': 'A listing of the current faculty openings at Bethel University',
+                'jobs-url': 'https://facultycareers-bethel.icims.com/jobs/search'
+            }
+        ]
+        all_jobs_list = []
+        for scrape_object in scrape_objects:
+            # Uses Requests to grab the xml
+            xml = requests.get(scrape_object.get('scrape-url'), params=None)
 
-        # Creates soup from bs4
-        soup = BeautifulSoup(xml.text, "html.parser")
+            # Creates soup from bs4
+            soup = BeautifulSoup(xml.text, "html.parser")
 
-        number = 0
-        jobs = []
+            jobs = []
+            # Loops through all links in XML, notated by the <loc> tag
+            for link in soup.find_all('loc'):
+                if '/jobs/search' not in link.get_text():
+                    job = self._scrape_job(link.get_text())
+                    jobs.append(job)
+                    all_jobs_list.append(job)
 
-        # Loops through all links in XML, notated by the <loc> tag
-        for link in soup.find_all('loc'):
-            if '/jobs/search' not in link.get_text():
-                jobs.append(self._scrape_job(link.get_text()))
-                number = number + 1
+            jobs.sort(key=lambda i: i['sort-date'])
 
-        jobs.sort(key=lambda i: i['sort-date'])
+            self._make_rss(jobs, scrape_object)
 
-        feed_date = datetime.datetime.now().strftime('%a, %d %b %Y')
-
-        # return "Scraped from %s Job Listings." % number
-        sitemap_xml = render_template('output.xml', **locals())
-        response = make_response(sitemap_xml)
-        response.headers["Content-Type"] = "application/xml"
-
-        file = open(app.config['INSTALL_LOCATION'] + '/news-campaign.rss', "wr")
-        file.write(sitemap_xml.encode('utf-8'))
-        file.close()
-        return response
+        # sort the all_jobs_list
+        all_jobs_list.sort(key=lambda i: i['sort-date'])
+        all_jobs_scrape_object = {
+            'rss-name': 'both.rss',
+            'scrape-url': None,
+            'title': 'Bethel University Staff and Faculty Openings',
+            'description': 'A listing of the current staff and faculty openings at Bethel University',
+            'jobs-url': 'https://www.bethel.edu/employment/'
+        }
+        self._make_rss(all_jobs_list, all_jobs_scrape_object)
+        return 'success'
 
     def _get_iframe_link(self, link):
         webpage = requests.get(link, params=None)
@@ -103,3 +132,14 @@ class JobRSSView(FlaskView):
     def _get_current_date(self):
         time = datetime.datetime.now().strftime("%d-%b-%y")
         return time
+
+    def _make_rss(self, jobs, scrape_objects):
+        feed_date = datetime.datetime.now().strftime('%a, %d %b %Y')
+
+        sitemap_xml = render_template('output.xml', **locals())
+        response = make_response(sitemap_xml)
+        response.headers["Content-Type"] = "application/xml"
+
+        file = open(app.config['INSTALL_LOCATION'] + '/app/rss/' + scrape_objects.get('rss-name'), "wr")
+        file.write(sitemap_xml.encode('utf-8'))
+        file.close()
