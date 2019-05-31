@@ -23,7 +23,7 @@ class JobRSSView(FlaskView):
         else:
             rss_name = 'both.rss'
 
-        file = open(app.config['INSTALL_LOCATION'] + '/app/rss/' + rss_name, "r")
+        file = open(app.config['INSTALL_LOCATION'] + '/app/rss/' + rss_name, "rb")
         response = make_response(file.read())
         response.headers["Content-Type"] = "application/xml"
         file.close()
