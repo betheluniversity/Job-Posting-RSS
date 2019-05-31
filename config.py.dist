@@ -1,3 +1,5 @@
+import os
+
 INSTALL_LOCATION = ''
 
 STAFF_SCRAPE_URL = ""
