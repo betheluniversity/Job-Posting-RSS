@@ -1,12 +1,12 @@
-import requests
 import datetime
 
-from flask import render_template, make_response
-from flask_classy import FlaskView, route
+import requests
 from bs4 import BeautifulSoup
+from flask import render_template, make_response, request
+from flask_classy import FlaskView, route
 
 from app import app
-from app.basic_auth import *
+from app.basic_auth import requires_auth
 
 
 class JobRSSView(FlaskView):
@@ -23,7 +23,7 @@ class JobRSSView(FlaskView):
         else:
             rss_name = 'both.rss'
 
-        file = open(app.config['INSTALL_LOCATION'] + '/app/rss/' + rss_name, "r")
+        file = open(app.config['INSTALL_LOCATION'] + '/app/rss/' + rss_name, "rb")
         response = make_response(file.read())
         response.headers["Content-Type"] = "application/xml"
         file.close()
@@ -140,6 +140,6 @@ class JobRSSView(FlaskView):
         response = make_response(sitemap_xml)
         response.headers["Content-Type"] = "application/xml"
 
-        file = open(app.config['INSTALL_LOCATION'] + '/app/rss/' + scrape_objects.get('rss-name'), "wr")
+        file = open(app.config['INSTALL_LOCATION'] + '/app/rss/' + scrape_objects.get('rss-name'), "wb")
         file.write(sitemap_xml.encode('utf-8'))
         file.close()
