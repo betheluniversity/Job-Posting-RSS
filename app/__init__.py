@@ -1,13 +1,16 @@
 import logging
 
 from flask import Flask
-from raven.contrib.flask import Sentry
+import sentry_sdk
 
 
 app = Flask(__name__)
 app.config.from_object('config')
 
-sentry = Sentry(app, dsn=app.config['SENTRY_URL'], logging=True, level=logging.ERROR)
+if app.config['SENTRY_URL']:
+    from sentry_sdk.integrations.flask import FlaskIntegration
+    sentry_sdk.init(dsn=app.config['SENTRY_URL'], integrations=[FlaskIntegration()])
+
 
 from app.views import JobRSSView
 JobRSSView.register(app, route_base='/')
