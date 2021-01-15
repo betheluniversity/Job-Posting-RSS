@@ -124,7 +124,7 @@ class JobRSSView(FlaskView):
         return {
             'link': link,
             'title': title,
-            'date': datetime.datetime.strftime(date, '%a, %d %b %Y'),
+            'date': utils.format_datetime(date),
             'sort-date': date,
             'id': job_id,
             'desc': desc
