@@ -1,5 +1,5 @@
 import datetime
-from datetime import date
+from datetime import date, timezone
 
 import requests
 from bs4 import BeautifulSoup
@@ -135,7 +135,7 @@ class JobRSSView(FlaskView):
         return time
 
     def _make_rss(self, jobs, scrape_objects):
-        feed_date = datetime.datetime.combine(date.today(), datetime.datetime.min.time())
+        feed_date = datetime.datetime.combine(date.today(), datetime.datetime.min.time()).replace(tzinfo=timezone.utc)
 
         sitemap_xml = render_template('output.xml', **locals())
         response = make_response(sitemap_xml)
