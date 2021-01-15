@@ -10,7 +10,7 @@
             <title>{{ job['title'] }}</title>
             <description>{{ job['desc'] }}</description>
             <pubDate>{{ job['date'] }}</pubDate>
-            <guid>{{ job['id'] }}</guid>
+            <guid isPermaLink="false">{{ job['id'] }}</guid>
             <link>{{ job['link'] }}</link>
         </item>
         {% endfor %}
