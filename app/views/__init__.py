@@ -135,7 +135,7 @@ class JobRSSView(FlaskView):
         return time
 
     def _make_rss(self, jobs, scrape_objects):
-        feed_date = utils.format_datetime(datetime.now())
+        feed_date = utils.format_datetime(datetime.datetime.now())
 
         sitemap_xml = render_template('output.xml', **locals())
         response = make_response(sitemap_xml)
