@@ -1,4 +1,5 @@
 import datetime
+from datetime import date
 
 import requests
 from bs4 import BeautifulSoup
@@ -134,7 +135,7 @@ class JobRSSView(FlaskView):
         return time
 
     def _make_rss(self, jobs, scrape_objects):
-        feed_date = datetime.datetime.now().strftime('%a, %d %b %Y')
+        feed_date = datetime.datetime.combine(date.today(), datetime.datetime.min.time())
 
         sitemap_xml = render_template('output.xml', **locals())
         response = make_response(sitemap_xml)
