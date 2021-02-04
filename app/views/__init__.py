@@ -99,6 +99,8 @@ class JobRSSView(FlaskView):
         try:
             date = soup.find(text='Posted Date').parent.findNext('span').attrs['title'].split(' ')[0]
             date = datetime.datetime.strptime(date, '%m/%d/%Y')
+            now = datetime.datetime.now()
+            date = date.replace(hour=now.hour, minute=now.minute, second=now.second)
         except:
             date = datetime.datetime.now()
 
